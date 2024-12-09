@@ -1,0 +1,23 @@
+Inversion of control (IOC) Container: In Spring , it is like a box that contains objects. We do not have to create
+objects , IOC container will directly give the objects. The IOC container contains classes.
+If we write @Component in any class,interface, field or method then that class will be kept in the IOC container.
+
+@Component
+public class Car
+{
+} //Example to show how we can keep a class in an IOC container. This is a bean.
+
+Application Context: It is a method by which we can achieve IOC container.
+
+
+Bean: Objects are referred to as beans. OR  If IOC container has any object then its called beans.
+
+Annotations
+@SpringBootApplication - This annotation is a combination of 3 annotations:
+@Configuration- Create bean inside a class.
+
+@EnableAutoConfiguration: While adding a database, we can update the `pom.xml` and use @EnableAutoConfiguration to
+enable automatic configuration without manually specifying the connection setup.
+
+@ComponentScan- Scans every class and wherever it finds @Component annotation , it sends that class in the IOC
+container.

@@ -27,16 +27,17 @@ Each user will have multiple journal entries.
 
 | Field     | Type     | Description                         |  
 |-----------|---------|--------------------------------------|  
-| `_id`     | ObjectId | Unique user ID (To be implemented)  |  
+| `id`     | ObjectId | Unique user ID (To be implemented)   |  
 | `username` | String  | User’s unique username              |  
+| `password` | String  | User’s unique password              |  
+
 
 ### **2. JournalEntry Collection** (Implemented)  
 Journal entries linked to users.  
 
 | Field     | Type     | Description                                |  
 |-----------|---------|---------------------------------------------|  
-| `_id`     | ObjectId | Unique identifier for the journal entry    |  
-| `userId`  | ObjectId | Reference to the User collection (Planned) |  
+| `id`     | ObjectId | Unique identifier for the journal entry    |  
 | `title`   | String   | Title of the journal entry                 |  
 | `content` | String   | Body of the journal entry                  |  
 | `date`    | Date     | Date of creation/update                    |  
@@ -47,12 +48,12 @@ Journal entries linked to users.
 
 ### **Journal Entry APIs**  
 
-| Method | Endpoint          | Description                                   |  
-|--------|------------------|------------------------------------------------|  
-| `POST` | `/journal/{username}` | Create a journal entry (User linking WIP) |  
-| `GET`  | `/journal/{id}`   | Retrieve a journal entry by ID                |  
-| `PUT`  | `/journal/{id}`   | Update an existing journal entry              |  
-| `DELETE` | `/journal/{id}` | Delete a journal entry by ID                  |  
+| Method   | Endpoint                         | Description                                      |  
+|----------|----------------------------------|--------------------------------------------------|  
+| `POST`   | `/journal/{username}`            | Create a journal entry (User linking WIP)        |  
+| `GET`    | `/journal/{username}`            | Retrieve a journal entry by ID                   |  
+| `PUT`    | `/journal/id/{username}{id}`     | Update an existing journal entry                 |  
+| `DELETE` | `/journal//id/{username}/{id}`   | Delete a journal entry by ID                     |  
 
 ---
 

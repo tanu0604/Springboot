@@ -1,0 +1,66 @@
+ORM- Object Relational Mapping is a technique in which we can map Java objects to the database.
+
+Lombok- Here, in we don't have to write getters, setters, no args constructor or args constructor. During compilation
+it generates these automatically. Dependency is added in the pom.xml file.
+
+
+ // Get all journal entries
+    @GetMapping
+    public List<JournalEntry> getAll() {
+        return journalEntryService.getAll();
+    }
+
+    // Create a new journal entry
+    @PostMapping
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry) {
+        try {
+            myEntry.setDate(LocalDate.now());
+            journalEntryService.saveEntry(myEntry);
+            return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    // Get journal entry by ID
+    @GetMapping("/id/{id}")
+    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId id) {
+        Optional<JournalEntry> journalEntry=journalEntryService.findById(id);
+        ResponseEntity<JournalEntry> ans=(journalEntry.isPresent())?new  ResponseEntity<>(journalEntry.get(), HttpStatus.OK):
+                new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+
+//        if (journalEntry.isPresent())
+//        {
+//            return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        return ans;
+    }
+
+    // Delete journal entry by ID
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<?> deleteJournalEntryById(@PathVariable ObjectId id) {
+        journalEntryService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Update journal entry by ID
+    @PutMapping("/id/{id}")
+    public ResponseEntity<JournalEntry> updateJournalEntry(@PathVariable String id, @RequestBody JournalEntry newEntry) {
+        ObjectId objId = new ObjectId(id);
+        JournalEntry old = journalEntryService.findById(objId).orElse(null);
+
+        if (old != null) {
+            old.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().isEmpty() ? newEntry.getTitle() : old.getTitle());
+            old.setContent(newEntry.getContent() != null && !newEntry.getContent().isEmpty() ? newEntry.getContent() : old.getContent());
+            old.setDate(newEntry.getDate() != null ? newEntry.getDate() : old.getDate());
+
+            journalEntryService.saveEntry(old);
+            return new ResponseEntity<>(old,HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    }

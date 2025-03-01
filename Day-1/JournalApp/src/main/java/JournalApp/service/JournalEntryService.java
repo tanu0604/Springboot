@@ -6,6 +6,7 @@ import JournalApp.entity.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,13 +23,31 @@ public class JournalEntryService {
     private UsersServices usersServices;
 
     // Save a Journal Entry
-    public void saveEntry(JournalEntry journalEntry, String username) {
-        User user = usersServices.findByUsername(username);
-        journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
-        JournalEntry saved=journalEntryRepo.save(journalEntry);
-        user.getJournalEntries().add(saved);
-        usersServices.saveUser(user);
-    }
+    //Here now @Transactional annotation will be used because we are separately saving in the user db and journal db
+    // this annotation will either save in all or show error in all.
+
+//     public void saveEntry(JournalEntry journalEntry, String username) {
+//        User user = usersServices.findByUsername(username);
+//        journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
+//        JournalEntry saved=journalEntryRepo.save(journalEntry);
+//        user.getJournalEntries().add(saved);
+//        usersServices.saveUser(user);
+//    }
+    @Transactional public void saveEntry(JournalEntry journalEntry, String username)
+    {
+        try {
+            User user = usersServices.findByUsername(username);
+            journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
+            JournalEntry saved=journalEntryRepo.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            usersServices.saveUser(user);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+            throw new RuntimeException("An error occurred while saving this entry",e);
+        }
+}
 
     public void saveEntry(JournalEntry journalEntry)
     {

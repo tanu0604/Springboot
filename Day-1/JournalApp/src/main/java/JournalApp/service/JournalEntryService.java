@@ -23,31 +23,15 @@ public class JournalEntryService {
     private UsersServices usersServices;
 
     // Save a Journal Entry
-    //Here now @Transactional annotation will be used because we are separately saving in the user db and journal db
-    // this annotation will either save in all or show error in all.
 
-//     public void saveEntry(JournalEntry journalEntry, String username) {
-//        User user = usersServices.findByUsername(username);
-//        journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
-//        JournalEntry saved=journalEntryRepo.save(journalEntry);
-//        user.getJournalEntries().add(saved);
-//        usersServices.saveUser(user);
-//    }
-    @Transactional public void saveEntry(JournalEntry journalEntry, String username)
-    {
-        try {
-            User user = usersServices.findByUsername(username);
-            journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
-            JournalEntry saved=journalEntryRepo.save(journalEntry);
-            user.getJournalEntries().add(saved);
-            usersServices.saveUser(user);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-            throw new RuntimeException("An error occurred while saving this entry",e);
-        }
-}
+    public void saveEntry(JournalEntry journalEntry, String username) {
+       User user = usersServices.findByUsername(username);
+       journalEntry.setDate(LocalDate.from(LocalDateTime.now()));
+       JournalEntry saved=journalEntryRepo.save(journalEntry);
+       user.getJournalEntries().add(saved);
+       usersServices.saveUser(user);
+   }
+  
 
     public void saveEntry(JournalEntry journalEntry)
     {
